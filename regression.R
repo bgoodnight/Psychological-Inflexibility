@@ -31,34 +31,24 @@ data$ANX <- rowMeans(data[,ANX])
 data$AAQII <- rowMeans(data[,AAQII])
 
 #Plot variables to visually inspect for normality
-library("ggplot2")
-qplot(x = MAAS, data = data)
-qplot(x = GHQ, data = data)
-qplot(x = SOM, data = data)
-qplot(x = DEP, data = data)
-qplot(x = ANX, data = data)
-qplot(x = AAQII, data = data)
+#library("ggplot2")
+#qplot(x = MAAS, data = data)
+#qplot(x = GHQ, data = data)
+#qplot(x = SOM, data = data)
+#qplot(x = DEP, data = data)
+#qplot(x = ANX, data = data)
+#qplot(x = AAQII, data = data)
 
-#Log transform non-normal variables prior to analysis
-data$newSOM <- log(data$SOM)
-qplot(x = newSOM, data = data)
-data$newDEP <- log(data$DEP)
-qplot(x = newDEP, data = data)
-data$newANX <- log(data$ANX)
-qplot(x = newANX, data = data)
-data$newAAQII <- log(data$AAQII)
-qplot(x = newAAQII, data = data)
-
-#Conduct path analysis using log-transformed variables
+#Conduct path analysis
 library("lavaan")
 
 model <- '
   # regressions
-    GHQ + newSOM + newDEP + newANX ~ newAAQII + MAAS + Age + Gender + SexOr
+    GHQ + SOM + DEP + ANX ~ AAQII + MAAS + Age + Gender + SexOr
   # residual correlations
-    newSOM ~~ GHQ
-    newDEP ~~ GHQ + newSOM
-    newANX ~~ GHQ + newSOM + newDEP
+    SOM ~~ GHQ
+    DEP ~~ GHQ + SOM
+    ANX ~~ GHQ + SOM + DEP
 '
 
 fit <- sem(model, data=data)
