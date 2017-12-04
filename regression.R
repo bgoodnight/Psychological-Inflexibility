@@ -49,6 +49,7 @@ model <- '
     SOM ~~ GHQ
     DEP ~~ GHQ + SOM
     ANX ~~ GHQ + SOM + DEP
+    AAQII ~~ MAAS
 '
 
 fit <- sem(model, data=data)
